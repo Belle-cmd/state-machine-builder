@@ -4,20 +4,28 @@ package com.example.asn3;
  * The model that stores all elements of the state machine defined in the editor
  */
 public class SMStateNode {
-    private SMModel model;
+    double left, top, width, height;
 
-    private InteractionModel iModel;
-
-    public SMStateNode() {}
-
-    public void setModel(SMModel model) {
-        this.model = model;
+    /**
+     * Constructor method that creates the dimensions of the box
+     * @param newLeft based on mouse click position
+     * @param newTop based on mouse click position
+     * @param newWidth new left pixel size
+     * @param newHeight new left pixel size
+     */
+    public SMStateNode(double newLeft, double newTop, double newWidth, double newHeight) {
+        left = newLeft;
+        top = newTop;
+        width = newWidth;
+        height = newHeight;
     }
 
-    public void setInteractionModel(InteractionModel iModel) {
-        this.iModel = iModel;
+    public boolean checkHit(double x, double y) {
+        return x >= left && x <= left+width && y >= top && y <= top+height;
     }
 
-    public void setController(AppController controller) {
+    public void move(double dX, double dY) {
+        left += dX;
+        top += dY;
     }
 }

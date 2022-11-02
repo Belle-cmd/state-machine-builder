@@ -13,7 +13,7 @@ public class MainUI extends BorderPane {
 
         // create model components
         SMModel model = new SMModel();
-        SMStateNode smStateNode = new SMStateNode();
+//        SMStateNode smStateNode = new SMStateNode();
         SMTransitionLink transitionLinkModel = new SMTransitionLink();
 
         // create interaction model component
@@ -27,11 +27,11 @@ public class MainUI extends BorderPane {
         toolPaletteView.setInteractionModel(iModel);
         toolPaletteView.setController(controller);
 
-        smStateNode.setModel(model);
-        smStateNode.setInteractionModel(iModel);
-        smStateNode.setController(controller);
+//        smStateNode.setModel(model);
+//        smStateNode.setInteractionModel(iModel);
+//        smStateNode.setController(controller);
 
-        model.addSubscriber(smStateNode);
+//        model.addSubscriber(smStateNode);
         iModel.addSubscriber(toolPaletteView);
         iModel.addSubscriber(diagramView);
 
