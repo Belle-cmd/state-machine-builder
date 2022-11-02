@@ -16,6 +16,7 @@ public class ToolPalette extends StackPane implements IModelListener {
 
     public ToolPalette() {
         VBox root = new VBox();
+        root.setStyle("-fx-background-color: white;");
         buttons = new ArrayList<>();
 
         ToolButton selectTool = new ToolButton("arrow.png");
@@ -33,10 +34,27 @@ public class ToolPalette extends StackPane implements IModelListener {
         iModel = im;
     }
 
-    public void setController(AppController controller) {}
+    public void setController(AppController controller) {
+        buttons.forEach(b -> {
+            b.setOnAction(e -> {
+                b.setButtonStatus(true);
+                controller.handleButtonClick(b.getButtonStatus());
+            });
+        });
+    }
 
-    public void iModelChanged() {}
+    public void iModelChanged() {
+        buttons.forEach(b -> {
+            b.unselect();
+            if (b.getButtonStatus() == iModel.getButtonSelection()) {
+                b.select();
+                System.out.println("iModelChanged: " + b.getButtonStatus());
+            }
+            b.setButtonStatus(false);  // enable only 1 tool mode to be selected
+        });
+    }
 
     public void init() {
+        buttons.get(0).fire();
     }
 }
