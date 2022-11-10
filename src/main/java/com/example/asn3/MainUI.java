@@ -26,12 +26,14 @@ public class MainUI extends BorderPane {
         // connect MVC components
         toolPaletteView.setInteractionModel(iModel);
         toolPaletteView.setController(controller);
+        diagramView.setController(controller);
+        diagramView.setModel(model);
 
 //        smStateNode.setModel(model);
 //        smStateNode.setInteractionModel(iModel);
 //        smStateNode.setController(controller);
 
-//        model.addSubscriber(smStateNode);
+        model.addSubscriber(diagramView);
         iModel.addSubscriber(toolPaletteView);
         iModel.addSubscriber(diagramView);
 

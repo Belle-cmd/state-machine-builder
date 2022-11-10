@@ -6,10 +6,19 @@ import java.util.ArrayList;
  * The interaction model that stores all information related to the app’s interaction state
  */
 public class InteractionModel {
+    /**
+     * List of subscribers that listen to this interaction model class
+     */
     private ArrayList<IModelListener> subscribers;
 
-    /** signify that a button is currently selected if its value is true, false otherwise **/
+    /**
+     * signify that a button is currently selected if its value is true, false otherwise
+     */
     private Boolean buttonSelection;
+
+    SMStateNode selectedNode;
+
+
 
     /**
      * Constructor method
@@ -45,5 +54,14 @@ public class InteractionModel {
      */
     public Boolean getButtonSelection() {
         return buttonSelection;
+    }
+
+    /**
+     * Saves the current node selected by the user in the canvas
+     * @param n
+     */
+    public void setSelected(SMStateNode n) {
+        selectedNode = n;
+        notifySubscribers();
     }
 }
