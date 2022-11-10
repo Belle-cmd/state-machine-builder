@@ -56,6 +56,9 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         canvas.setOnMouseReleased(e -> controller.handleReleased(e, e.getX()/width, e.getY()/height));
     }
 
+    /**
+     * Draw nodes on the canvas
+     */
     public void draw() {
         // Clears a portion of the canvas with a transparent color value
         gc.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
@@ -75,6 +78,8 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
             boxHeight = n.height * height;
 
             // changes the boarder of the selected node to indicate user selection
+            System.out.println("Node from model: " + n);
+            System.out.println("(in diagramView)selected node from iModel: " + iModel.getSelectedNode());
             if (n == iModel.getSelectedNode()) {
                 gc.setStroke(Color.RED);
             } else {

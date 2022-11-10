@@ -62,7 +62,6 @@ public class AppController {
      */
     public void handleButtonClick(boolean oldStatus) {
         iModel.setButtonStatus(oldStatus);
-        System.out.println("now in controller! called by view");
     }
 
     /**
@@ -82,10 +81,12 @@ public class AppController {
                 // side effect: set node selection
 
                 // if a node is hit, set selection and move to new state
-
-                if (model.checkHit(mouseEvent.getX(), mouseEvent.getY())) {
-                    SMStateNode n = model.whichHit(mouseEvent.getX(),mouseEvent.getY());
-                    iModel.setSelected(n);  // notifies the iModel about the new node selected
+                boolean nodeHit = model.checkHit(nx, ny);
+                if (nodeHit) {
+                    System.out.println("node is hit");
+                    SMStateNode n = model.whichNode(nx,ny);
+                    System.out.println("CHECK IF NODE IS HIT: " + n);
+                    iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
 
                     prevX = mouseEvent.getX();
                     prevY = mouseEvent.getY();
@@ -108,6 +109,8 @@ public class AppController {
      * @param ny mouseY
      */
     public void handleDragged(MouseEvent mouseEvent, double nx, double ny) {
+//        System.out.println("Now in handleDragged() in controller!");
+
         double dX = nx - prevX;
         double dY = ny - prevY;
         prevX = nx;
@@ -121,7 +124,7 @@ public class AppController {
 
             case DRAGGING -> {
                 // update the coordinates to reposition the node
-                model.moveNode(iModel.selectedNode, dX, dY);
+                model.moveNode(iModel.getSelectedNode(), dX, dY);
             }
         }
     }
@@ -136,6 +139,7 @@ public class AppController {
      * @param ny mouseY
      */
     public void handleReleased(MouseEvent mouseEvent, double nx, double ny) {
+        System.out.println("Now in handleReleased() in controller!");
         switch (currentState) {
             case PREPARE_CREATE -> {
                 // user releases the mouse while holding a node; place node into the canvas

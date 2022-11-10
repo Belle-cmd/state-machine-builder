@@ -35,6 +35,7 @@ public class MainUI extends BorderPane {
 //        smStateNode.setController(controller);
 
         model.addSubscriber(diagramView);
+        iModel.addSubscriber(diagramView);
         iModel.addSubscriber(toolPaletteView);
         iModel.addSubscriber(diagramView);
 

@@ -38,7 +38,7 @@ public class SMStateNode {
      * @param y mouseY position
      * @return boolean true if node is clicked by the user, false otherwise
      */
-    public boolean contains(double x, double y) {
+    public boolean checkNodeHitBox(double x, double y) {
         return x >= left && x <= left+width && y >= top && y <= top+height;
     }
 }

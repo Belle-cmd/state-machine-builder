@@ -48,7 +48,6 @@ public class ToolPalette extends StackPane implements IModelListener {
             b.unselect();
             if (b.getButtonStatus() == iModel.getButtonSelection()) {
                 b.select();
-                System.out.println("iModelChanged: " + b.getButtonStatus());
             }
             b.setButtonStatus(false);  // enable only 1 tool mode to be selected
         });

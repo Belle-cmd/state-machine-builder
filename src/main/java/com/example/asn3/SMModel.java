@@ -35,30 +35,31 @@ public class SMModel {
         subscribers.forEach(SMModelListener::modelChanged);
     }
 
+
+
+
     /**
      * Checks if a node has been selected by the user or not
      * @param x mouseX position
      * @param y mouseY position
-     * @return
+     * @return boolean true if node is selected, false if not
      */
     public boolean checkHit(double x, double y) {
-        for (SMStateNode n : nodes) {
-            if (n.contains(x, y)) return true;
-        }
-        return false;
+        return nodes.stream().anyMatch(n -> n.checkNodeHitBox(x, y));
     }
 
     /**
-     * Finds which node has been selected
+     * Find which node has been selected
      * @param x mouseX position
      * @param y mouseY position
      * @return the node object that the user selected, otherwise null
      */
-    public SMStateNode whichHit(double x, double y) {
+    public SMStateNode whichNode(double x, double y) {
+        SMStateNode found = null;
         for (SMStateNode n : nodes) {
-            if (n.contains(x,y)) return n;
+            if (n.checkNodeHitBox(x,y)) found = n;
         }
-        return null;
+        return found;
     }
 
     /**

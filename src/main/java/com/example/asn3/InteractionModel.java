@@ -16,7 +16,7 @@ public class InteractionModel {
      */
     private Boolean buttonSelection;
 
-    SMStateNode selectedNode;
+    private SMStateNode selectedNode;
 
 
 
@@ -24,6 +24,7 @@ public class InteractionModel {
      * Constructor method
      */
     public InteractionModel() {
+        selectedNode = null;
         subscribers = new ArrayList<>();
     }
 
@@ -45,7 +46,6 @@ public class InteractionModel {
     public void setButtonStatus(boolean oldStatus) {
         buttonSelection = oldStatus;  // change status of the button to selected if unselected at first (vice versa)
         notifySubscribers();
-        System.out.println("Now in iModel. Called by controller!");
     }
 
     /**
@@ -60,7 +60,8 @@ public class InteractionModel {
      * Saves the current node selected by the user in the canvas
      * @param n node selected by the user
      */
-    public void setSelected(SMStateNode n) {
+    public void setSelectedNode(SMStateNode n) {
+        System.out.println("SELECTED NODE IS STORED IN IMODEL:" + n);
         selectedNode = n;
         notifySubscribers();
     }
