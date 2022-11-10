@@ -1,6 +1,11 @@
 package com.example.asn3;
 
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+
+import java.util.Objects;
 
 /**
  * The controller to handle events from the view classes
@@ -62,6 +67,36 @@ public class AppController {
      */
     public void handleButtonClick(boolean oldStatus) {
         iModel.setButtonStatus(oldStatus);
+    }
+
+    /**
+     * Perform tool operations at tool button click while changing mouse cursor
+     * @param scene current scene
+     * @param toolName
+     */
+    public void handleTool(Scene scene, String toolName) {
+        if (Objects.equals(toolName, "arrow")) {
+            scene.setCursor(Cursor.DEFAULT);
+            arrowTool();
+        } else if (Objects.equals(toolName, "pan")) {
+            scene.setCursor(Cursor.MOVE);
+            panTool();
+        } else if (Objects.equals(toolName, "link")) {
+            scene.setCursor(Cursor.CROSSHAIR);
+            linkTool();
+        }
+    }
+
+    private void linkTool() {
+        System.out.println("link tool");
+    }
+
+    private void panTool() {
+        System.out.println("pan tool");
+    }
+
+    private void arrowTool() {
+        System.out.println("pointer tool");
     }
 
     /**

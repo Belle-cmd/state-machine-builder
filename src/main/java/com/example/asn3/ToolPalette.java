@@ -1,6 +1,5 @@
 package com.example.asn3;
 
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -19,11 +18,11 @@ public class ToolPalette extends StackPane implements IModelListener {
         root.setStyle("-fx-background-color: white;");
         buttons = new ArrayList<>();
 
-        ToolButton selectTool = new ToolButton("arrow.png");
+        ToolButton selectTool = new ToolButton("arrow.png", "arrow");
         buttons.add(selectTool);
-        ToolButton linkTool = new ToolButton("link.png");
+        ToolButton linkTool = new ToolButton("pan.png", "pan");
         buttons.add(linkTool);
-        ToolButton panTool = new ToolButton("pan.png");
+        ToolButton panTool = new ToolButton("link.png", "link");
         buttons.add(panTool);
 
         root.getChildren().addAll(buttons);
@@ -35,12 +34,11 @@ public class ToolPalette extends StackPane implements IModelListener {
     }
 
     public void setController(AppController controller) {
-        buttons.forEach(b -> {
-            b.setOnAction(e -> {
-                b.setButtonStatus(true);
-                controller.handleButtonClick(b.getButtonStatus());
-            });
-        });
+        buttons.forEach(b -> b.setOnAction(e -> {
+            b.setButtonStatus(true);
+            controller.handleButtonClick(b.getButtonStatus());
+            controller.handleTool(b.getScene(), b.getToolName());
+        }));
     }
 
     public void iModelChanged() {

@@ -16,7 +16,14 @@ public class ToolButton extends Button {
     private Background selectedBG;
     private Background unselectedBG;
 
-    public ToolButton(String imgName) {
+    private String toolName;
+
+    /**
+     * Constructor method
+     * @param imgName name of image file that gets attached to the button
+     * @param newToolName name of tool
+     */
+    public ToolButton(String imgName, String newToolName) {
         super();
 
         // add image to button
@@ -31,6 +38,8 @@ public class ToolButton extends Button {
         selectedBG = new Background(new BackgroundFill(darkColor,new CornerRadii(10),null));
         unselectedBG = new Background(new BackgroundFill(color,new CornerRadii(10),new Insets(5,5,5,5)));
         setBackground(unselectedBG);
+
+        this.toolName = newToolName;
 
         this.buttonStatus = false;
     }
@@ -63,5 +72,9 @@ public class ToolButton extends Button {
      */
     public void setButtonStatus(Boolean buttonStatus) {
         this.buttonStatus = buttonStatus;
+    }
+
+    public String getToolName() {
+        return toolName;
     }
 }
