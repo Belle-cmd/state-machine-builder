@@ -58,6 +58,7 @@ public class AppController {
 
     /**
      * Called by ToolPalette view class when the user selects a tool
+     * @param oldStatus boolean
      */
     public void handleButtonClick(boolean oldStatus) {
         iModel.setButtonStatus(oldStatus);
@@ -66,6 +67,9 @@ public class AppController {
 
     /**
      * Creates a new state machine box when the user clicks on an empty canvas
+     * @param mouseEvent event
+     * @param nx mouseX
+     * @param ny mouseY
      */
     public void handlePressed(MouseEvent mouseEvent, double nx, double ny) {
         System.out.println("Now in handlePressed() in controller!");
@@ -97,10 +101,40 @@ public class AppController {
         }
     }
 
-
+    /**
+     *
+     * @param mouseEvent event
+     * @param nx mouseX
+     * @param ny mouseY
+     */
     public void handleDragged(MouseEvent mouseEvent, double nx, double ny) {
+        double dX = nx - prevX;
+        double dY = ny - prevY;
+        prevX = nx;
+        prevY = ny;
 
+        switch (currentState) {
+            case PREPARE_CREATE -> {
+                // go back to ready state since user just pressed the canvas (not a node) and dragged somewhere
+                currentState = State.READY;
+            }
+
+            case DRAGGING -> {
+                // update the coordinates to reposition the node
+                model.moveNode(iModel.selectedNode, dX, dY);
+            }
+        }
     }
+
+    /**
+     * Manages the dragging state release event (when the user is dragging a node and has released the mouse, so
+     * that the node will be set in place in the canvas) and prepare_create state's release event (when the user
+     * has clicked on the canvas/node; if released on the canvas, a new node is created, otherwise place the node
+     * on the canvas)
+     * @param mouseEvent event
+     * @param nx mouseX
+     * @param ny mouseY
+     */
     public void handleReleased(MouseEvent mouseEvent, double nx, double ny) {
         switch (currentState) {
             case PREPARE_CREATE -> {

@@ -71,11 +71,20 @@ public class SMModel {
 
     /**
      * Create a new state machine node
-     * @param x mouseX position where node will be created
-     * @param y mouseY position where node will be created
      */
     public void createNode(double left, double top, double width, double bottom) {
         nodes.add(new SMStateNode(left, top, width, bottom));
+        notifySubscribers();
+    }
+
+    /**
+     * Move the state machine node to a new position when the user is dragging the node
+     * @param n node to be moved
+     * @param dX mouseX position
+     * @param dY mouseY position
+     */
+    public void moveNode(SMStateNode n, double dX, double dY) {
+        n.move(dX, dY);
         notifySubscribers();
     }
 
