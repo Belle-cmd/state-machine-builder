@@ -7,9 +7,17 @@ import java.util.ArrayList;
  */
 public class InteractionModel {
     /**
-     * List of subscribers that listen to this interaction model class
+     * List of subscribers that notify changes for the tools
      */
-    private ArrayList<IModelListener> subscribers;
+    private ArrayList<IModelListener> toolsSubscribers;
+
+    /**
+     * List of subscribers that notify changes for canvas
+     * - need to separate objects from the tool palette and objects in the canvas to avoid the tool selection
+     * and the canvas selections to both be affected by a single data alteration in the interaction model
+     */
+    private ArrayList<IModelListener> canvasSubscribers;
+
 
     /**
      * signify that a button is currently selected if its value is true, false otherwise
@@ -25,15 +33,24 @@ public class InteractionModel {
      */
     public InteractionModel() {
         selectedNode = null;
-        subscribers = new ArrayList<>();
+        toolsSubscribers = new ArrayList<>();
+        canvasSubscribers = new ArrayList<>();
     }
 
-    public void addSubscriber(IModelListener sub) {
-        subscribers.add(sub);
+    public void addToolSubscriber(IModelListener sub) {
+        toolsSubscribers.add(sub);
+    }
+
+    public void addCanvasSubscriber(IModelListener sub) {
+        canvasSubscribers.add(sub);
     }
 
     private void notifySubscribers() {
-        subscribers.forEach(IModelListener::iModelChanged);
+        toolsSubscribers.forEach(IModelListener::iModelChanged);
+    }
+
+    private void notifyCanvasSubscribers() {
+        canvasSubscribers.forEach(IModelListener::iModelChanged);
     }
 
 
@@ -63,7 +80,7 @@ public class InteractionModel {
     public void setSelectedNode(SMStateNode n) {
         System.out.println("SELECTED NODE IS STORED IN IMODEL:" + n);
         selectedNode = n;
-        notifySubscribers();
+        notifyCanvasSubscribers();
     }
 
     /**
