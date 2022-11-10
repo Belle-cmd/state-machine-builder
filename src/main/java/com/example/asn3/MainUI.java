@@ -22,15 +22,22 @@ public class MainUI extends BorderPane {
         // create controller component
         AppController controller = new AppController();
 
+
         // connect MVC components
         model.addSubscriber(diagramView);
         iModel.addCanvasSubscriber(diagramView);
         iModel.addToolSubscriber(toolPaletteView);
 
+        // set up initial state; have to be declared here in order for cursor changes to be enabled
+        // initializing buttons before the controller is set causes buttons to be null -> buttons need to be
+        // initialized before the controller is set since the scene is retrieved through the tool buttons
+        toolPaletteView.init();
+        toolPaletteView.setController(controller);
+
         toolPaletteView.setInteractionModel(iModel);
-        diagramView.setController(controller);
-        diagramView.setModel(model);
         diagramView.setIModel(iModel);
+        diagramView.setModel(model);
+        diagramView.setController(controller);
 
 //        smStateNode.setModel(model);
 //        smStateNode.setInteractionModel(iModel);
@@ -44,12 +51,5 @@ public class MainUI extends BorderPane {
         // set up View layout
         this.setLeft(toolPaletteView);
         this.setCenter(diagramView);
-
-        // set up initial state; have to be declared here in order for cursor changes to be enabled
-        // initializing buttons before the controller is set causes buttons to be null -> buttons need to be
-        // initialized before the controller is set since the scene is retrieved through the tool buttons
-        toolPaletteView.init();
-        toolPaletteView.setController(controller);
-
     }
 }

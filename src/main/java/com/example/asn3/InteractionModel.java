@@ -20,12 +20,21 @@ public class InteractionModel {
 
 
     /**
-     * signify that a button is currently selected if its value is true, false otherwise
+     * signify that a tool button is currently selected if its value is true, false otherwise
      */
     private Boolean buttonSelection;
 
+    /**
+     * Current state machine node selected by the user
+     */
     private SMStateNode selectedNode;
 
+    /**
+     * Boolean indicating if the user can create a node in a canvas location, move a selected node, or select a node.
+     * This is activated when the pointer tool is selected to enable the user to manipulate a state machine node.
+     * If set to false, the user can't create a node in a location, move a selected node, select a node
+     */
+    private Boolean nodeControl;
 
 
     /**
@@ -33,6 +42,7 @@ public class InteractionModel {
      */
     public InteractionModel() {
         selectedNode = null;
+        nodeControl = false;
         toolsSubscribers = new ArrayList<>();
         canvasSubscribers = new ArrayList<>();
     }
@@ -91,7 +101,27 @@ public class InteractionModel {
         return selectedNode;
     }
 
+    /**
+     * Deselect a state machine node
+     */
     public void unselectNode() {
         selectedNode = null;
+    }
+
+    /**
+     * The value of nodeControl is manipulated by the ToolPalette view based on the tool buttons.
+     * The value of nodeControl is checked at the controller to perform selection, position, node creation.
+     * @return if true, user can manipulate node creation, position, selection; false otherwise
+     */
+    public Boolean getNodeControl() {
+        return nodeControl;
+    }
+
+    /**
+     * Change the value of the nodeControl variable (indicates if node interaction and manipulation is allowed)
+     * @param nodeControl new boolean value indicating if node movement, creation, selection is allowed
+     */
+    public void setNodeControl(Boolean nodeControl) {
+        this.nodeControl = nodeControl;
     }
 }

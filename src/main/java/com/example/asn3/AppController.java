@@ -88,14 +88,20 @@ public class AppController {
     }
 
     private void linkTool() {
+        if (iModel.getNodeControl()) iModel.setNodeControl(false);
+        System.out.println(iModel.getNodeControl());
         System.out.println("link tool");
     }
 
     private void panTool() {
+        if (iModel.getNodeControl()) iModel.setNodeControl(false);
+        System.out.println(iModel.getNodeControl());
         System.out.println("pan tool");
     }
 
     private void arrowTool() {
+        if (!iModel.getNodeControl()) iModel.setNodeControl(true);
+        System.out.println(iModel.getNodeControl());
         System.out.println("pointer tool");
     }
 
@@ -106,6 +112,9 @@ public class AppController {
      * @param ny mouseY
      */
     public void handlePressed(MouseEvent mouseEvent, double nx, double ny) {
+        // only run this code when nodeControl is set to true
+        if (!iModel.getNodeControl()) {return;}
+
         prevX = nx;
         prevY = ny;
 
@@ -138,6 +147,9 @@ public class AppController {
      * @param ny mouseY
      */
     public void handleDragged(MouseEvent mouseEvent, double nx, double ny) {
+        // only run this code when nodeControl is set to true
+        if (!iModel.getNodeControl()) {return;}
+
         double dX = nx - prevX;
         double dY = ny - prevY;
         prevX = nx;
@@ -166,6 +178,9 @@ public class AppController {
      * @param ny mouseY
      */
     public void handleReleased(MouseEvent mouseEvent, double nx, double ny) {
+        // only run this code when nodeControl is set to true
+        if (!iModel.getNodeControl()) {return;}
+
         switch (currentState) {
             case PREPARE_CREATE -> {
                 // user releases the mouse while holding a node; place node into the canvas
