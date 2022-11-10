@@ -4,7 +4,9 @@ package com.example.asn3;
  * The model that stores all elements of the state machine defined in the editor
  */
 public class SMStateNode {
-    /* dimensions of the node */
+    /**
+     *  dimensions of the node
+     */
     double left, top, width, height;
 
     /**
@@ -15,10 +17,10 @@ public class SMStateNode {
      * @param newHeight new left pixel size
      */
     public SMStateNode(double newLeft, double newTop, double newWidth, double newHeight) {
-        left = newLeft;
-        top = newTop;
-        width = newWidth;
-        height = newHeight;
+        this.left = newLeft;
+        this.top = newTop;
+        this.width = newWidth;
+        this.height = newHeight;
     }
 
 

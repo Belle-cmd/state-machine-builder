@@ -71,7 +71,6 @@ public class AppController {
      * @param ny mouseY
      */
     public void handlePressed(MouseEvent mouseEvent, double nx, double ny) {
-        System.out.println("Now in handlePressed() in controller!");
         prevX = nx;
         prevY = ny;
 
@@ -83,19 +82,14 @@ public class AppController {
                 // if a node is hit, set selection and move to new state
                 boolean nodeHit = model.checkHit(nx, ny);
                 if (nodeHit) {
-                    System.out.println("node is hit");
                     SMStateNode n = model.whichNode(nx,ny);
-                    System.out.println("CHECK IF NODE IS HIT: " + n);
                     iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
-
-                    prevX = mouseEvent.getX();
-                    prevY = mouseEvent.getY();
+                    System.out.println("NODE IS HIT: " + n);
 
                     currentState = State.DRAGGING;  // move to a new state
                 } else {
                     // context: user selected the canvas
                     // side effects: none
-
                     currentState = State.PREPARE_CREATE;  // move to a new state
                 }
             }
@@ -109,8 +103,6 @@ public class AppController {
      * @param ny mouseY
      */
     public void handleDragged(MouseEvent mouseEvent, double nx, double ny) {
-//        System.out.println("Now in handleDragged() in controller!");
-
         double dX = nx - prevX;
         double dY = ny - prevY;
         prevX = nx;
@@ -139,7 +131,6 @@ public class AppController {
      * @param ny mouseY
      */
     public void handleReleased(MouseEvent mouseEvent, double nx, double ny) {
-        System.out.println("Now in handleReleased() in controller!");
         switch (currentState) {
             case PREPARE_CREATE -> {
                 // user releases the mouse while holding a node; place node into the canvas

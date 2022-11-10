@@ -69,17 +69,13 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         gc.setLineDashes();  // boarder of the rectangle set to solid
 
         model.getNodes().forEach(n -> {
-            double boxLeft, boxTop, boxWidth, boxHeight;  // dimensions of the box
-
-            // set the rectangle dimensions
+            double boxLeft, boxTop, boxWidth, boxHeight;  // set dimensions of the box
             boxLeft = n.left * width;
             boxTop = n.top * height;
             boxWidth = n.width * width;
             boxHeight = n.height * height;
 
             // changes the boarder of the selected node to indicate user selection
-            System.out.println("Node from model: " + n);
-            System.out.println("(in diagramView)selected node from iModel: " + iModel.getSelectedNode());
             if (n == iModel.getSelectedNode()) {
                 gc.setStroke(Color.RED);
             } else {
@@ -94,12 +90,10 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     @Override
     public void iModelChanged() {
         draw();  // handles change in boarder
-        System.out.println("now in iModelChanged() of diagramView!");
     }
 
     @Override
     public void modelChanged() {
         draw();  // handles node creation
-        System.out.println("now in modelChanged() of diagramView");
     }
 }
