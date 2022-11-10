@@ -28,6 +28,7 @@ public class MainUI extends BorderPane {
         toolPaletteView.setController(controller);
         diagramView.setController(controller);
         diagramView.setModel(model);
+        diagramView.setIModel(iModel);
 
 //        smStateNode.setModel(model);
 //        smStateNode.setInteractionModel(iModel);

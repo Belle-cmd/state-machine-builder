@@ -68,23 +68,30 @@ public class AppController {
      * Creates a new state machine box when the user clicks on an empty canvas
      */
     public void handlePressed(MouseEvent mouseEvent, double nx, double ny) {
+        System.out.println("Now in handlePressed() in controller!");
         prevX = nx;
         prevY = ny;
 
         switch (currentState) {
             case READY -> {
-                // context: selection on a state machine node
+                // context: user selected on a state machine node
                 // side effect: set node selection
+
+                // if a node is hit, set selection and move to new state
+
                 if (model.checkHit(mouseEvent.getX(), mouseEvent.getY())) {
                     SMStateNode n = model.whichHit(mouseEvent.getX(),mouseEvent.getY());
                     iModel.setSelected(n);  // notifies the iModel about the new node selected
+
                     prevX = mouseEvent.getX();
                     prevY = mouseEvent.getY();
 
-                    // move eto the new state
-                    currentState = State.DRAGGING;
+                    currentState = State.DRAGGING;  // move to a new state
                 } else {
-                    currentState = State.PREPARE_CREATE;
+                    // context: user selected the canvas
+                    // side effects: none
+
+                    currentState = State.PREPARE_CREATE;  // move to a new state
                 }
             }
         }
@@ -95,6 +102,18 @@ public class AppController {
 
     }
     public void handleReleased(MouseEvent mouseEvent, double nx, double ny) {
-
+        switch (currentState) {
+            case PREPARE_CREATE -> {
+                // user releases the mouse while holding a node; place node into the canvas
+                // model will increase its blob which will initiate view to draw blob on canvas
+                model.createNode(nx-0.05, ny-0.05, 0.1, 0.1);
+                currentState = State.READY;
+            }
+            case DRAGGING -> {
+                // user releases the mouse when it isn't holding a node, just go back to ready state
+                iModel.unselectNode();
+                currentState = State.READY;
+            }
+        }
     }
 }

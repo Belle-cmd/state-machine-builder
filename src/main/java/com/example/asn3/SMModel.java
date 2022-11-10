@@ -31,6 +31,10 @@ public class SMModel {
         subscribers.add(sub);
     }
 
+    private void notifySubscribers() {
+        subscribers.forEach(SMModelListener::modelChanged);
+    }
+
     /**
      * Checks if a node has been selected by the user or not
      * @param x mouseX position
@@ -56,4 +60,24 @@ public class SMModel {
         }
         return null;
     }
+
+    /**
+     * Returns all the state machine nodes created in the canvas
+     * @return list of nodes
+     */
+    public List<SMStateNode> getNodes() {
+        return nodes;
+    }
+
+    /**
+     * Create a new state machine node
+     * @param x mouseX position where node will be created
+     * @param y mouseY position where node will be created
+     */
+    public void createNode(double left, double top, double width, double bottom) {
+        nodes.add(new SMStateNode(left, top, width, bottom));
+        notifySubscribers();
+    }
+
+
 }

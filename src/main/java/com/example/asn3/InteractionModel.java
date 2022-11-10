@@ -58,10 +58,22 @@ public class InteractionModel {
 
     /**
      * Saves the current node selected by the user in the canvas
-     * @param n
+     * @param n node selected by the user
      */
     public void setSelected(SMStateNode n) {
         selectedNode = n;
         notifySubscribers();
+    }
+
+    /**
+     * Get current selected node by the user
+     * @return selected node object
+     */
+    public SMStateNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void unselectNode() {
+        selectedNode = null;
     }
 }
