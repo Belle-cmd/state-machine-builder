@@ -59,7 +59,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     /**
      * Draw nodes on the canvas
      */
-    public void draw() {
+    public void drawNodes() {
         // Clears a portion of the canvas with a transparent color value
         gc.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
 
@@ -89,11 +89,11 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
 
     @Override
     public void iModelChanged() {
-        draw();  // handles change in boarder
+        drawNodes();  // handles change in boarder
     }
 
     @Override
     public void modelChanged() {
-        draw();  // handles node creation
+        drawNodes();  // handles node creation
     }
 }

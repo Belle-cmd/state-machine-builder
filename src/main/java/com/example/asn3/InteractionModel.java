@@ -18,16 +18,17 @@ public class InteractionModel {
      */
     private ArrayList<IModelListener> canvasSubscribers;
 
-
-    /**
-     * signify that a tool button is currently selected if its value is true, false otherwise
-     */
-    private Boolean buttonSelection;
-
     /**
      * Current state machine node selected by the user
      */
     private SMStateNode selectedNode;
+
+    // the ff boolean values below are used to manage tool buttons to help organize how controller runs!
+
+    /**
+     * Boolean signifying that a tool button is currently selected if its value is true, false otherwise
+     */
+    private Boolean buttonSelection;
 
     /**
      * Boolean indicating if the user can create a node in a canvas location, move a selected node, or select a node.
@@ -35,6 +36,11 @@ public class InteractionModel {
      * If set to false, the user can't create a node in a location, move a selected node, select a node
      */
     private Boolean nodeControl;
+
+    /**
+     * Boolean indicating if the user can create transition links (true) or not (false).
+     */
+    private Boolean transitionLinkControl;
 
 
     /**
@@ -123,5 +129,21 @@ public class InteractionModel {
      */
     public void setNodeControl(Boolean nodeControl) {
         this.nodeControl = nodeControl;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Boolean getTransitionLinkControl() {
+        return transitionLinkControl;
+    }
+
+    /**
+     *
+     * @param transitionLinkControl
+     */
+    public void setTransitionLinkControl(Boolean transitionLinkControl) {
+        this.transitionLinkControl = transitionLinkControl;
     }
 }

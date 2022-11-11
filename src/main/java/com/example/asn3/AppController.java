@@ -29,7 +29,7 @@ public class AppController {
     private SMModel model;
 
     /**
-     * The current state of the program
+     * The current state of the program based on state machine model
      */
     private State currentState;
 
@@ -70,39 +70,22 @@ public class AppController {
     }
 
     /**
-     * Perform tool operations at tool button click while changing mouse cursor
+     * Perform tool operations at tool button click while changing mouse cursor.
+     * Set variable values based on the user's chosen tool.
      * @param scene current scene
      * @param toolName
      */
     public void handleTool(Scene scene, String toolName) {
         if (Objects.equals(toolName, "arrow")) {
             scene.setCursor(Cursor.DEFAULT);
-            arrowTool();
+            if (!iModel.getNodeControl()) iModel.setNodeControl(true);
         } else if (Objects.equals(toolName, "pan")) {
+            if (iModel.getNodeControl()) iModel.setNodeControl(false);
             scene.setCursor(Cursor.MOVE);
-            panTool();
         } else if (Objects.equals(toolName, "link")) {
+            if (iModel.getNodeControl()) iModel.setNodeControl(false);
             scene.setCursor(Cursor.CROSSHAIR);
-            linkTool();
         }
-    }
-
-    private void linkTool() {
-        if (iModel.getNodeControl()) iModel.setNodeControl(false);
-        System.out.println(iModel.getNodeControl());
-        System.out.println("link tool");
-    }
-
-    private void panTool() {
-        if (iModel.getNodeControl()) iModel.setNodeControl(false);
-        System.out.println(iModel.getNodeControl());
-        System.out.println("pan tool");
-    }
-
-    private void arrowTool() {
-        if (!iModel.getNodeControl()) iModel.setNodeControl(true);
-        System.out.println(iModel.getNodeControl());
-        System.out.println("pointer tool");
     }
 
     /**
@@ -141,7 +124,9 @@ public class AppController {
     }
 
     /**
-     *
+     * Manages the dragging state and prepare_create state. During dragging state, nodes being dragged can be
+     * moved. If the user dragged on a canvas instead of a node, nothing occurs and the state simply switched to
+     * the ready state.
      * @param mouseEvent event
      * @param nx mouseX
      * @param ny mouseY

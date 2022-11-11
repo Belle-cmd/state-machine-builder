@@ -13,8 +13,6 @@ public class MainUI extends BorderPane {
 
         // create model components
         SMModel model = new SMModel();
-//        SMStateNode smStateNode = new SMStateNode();
-        SMTransitionLink transitionLinkModel = new SMTransitionLink();
 
         // create interaction model component
         InteractionModel iModel = new InteractionModel();
