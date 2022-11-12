@@ -56,7 +56,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
 
         });
         canvas.setOnMouseDragged(e -> {
-            controller.handleDragged(e, e.getX()/width, e.getY()/height);
+            controller.handleCanvasDragged(e, e.getX()/width, e.getY()/height);
         });
         canvas.setOnMouseReleased(e -> {
             controller.handleReleased(e, e.getX()/width, e.getY()/height);

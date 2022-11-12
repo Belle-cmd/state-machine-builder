@@ -89,7 +89,7 @@ public class AppController {
      * Perform tool operations at tool button click while changing mouse cursor.
      * Set variable values based on the user's chosen tool.
      * @param scene current scene
-     * @param toolName
+     * @param toolName name of the tool button
      */
     public void ToggleTool(Scene scene, String toolName) {
         if (Objects.equals(toolName, "arrow")) {
@@ -126,7 +126,6 @@ public class AppController {
             nodeHandlePress(mouseEvent, nx, ny);
         }
 
-        // THIS IS NULL RIGHT NOW FIX IT ASAP
         if (iModel.getTransitionLinkControl()) {
             System.out.println("transitionLinkControl status: " + iModel.getTransitionLinkControl());
             linkHandlePress(mouseEvent, nx, ny);
@@ -136,7 +135,8 @@ public class AppController {
 
 
     /**
-     * Starts creating a line at starting point when the user clicks on a node
+     * Starts creating a line at starting point when the user clicks on a node. In the state machine model of the
+     * transition links, this function handles the jump from the READY state to the PREPARE_CREATION state
      * @param mouseEvent triggered mouse event
      * @param nx mouse X coordinate
      * @param ny mouse Y coordinate
@@ -145,21 +145,18 @@ public class AppController {
         prevLineX = nx;
         prevLineY = ny;
 
-        switch (currentLinkState) {
-            case READY -> {
-                boolean nodeHit = model.checkHit(nx, ny);
-                if (nodeHit) {
-                    // the mouse clicked on an existing node
-                    SMStateNode n = model.whichNode(nx,ny);
-                    iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
+        if (currentLinkState == LinkState.READY) {
+            boolean nodeHit = model.checkHit(nx, ny);
+            if (nodeHit) {
+                // context: user selected on a state machine node
+                // side effect: set node selection
+                SMStateNode n = model.whichNode(nx, ny);
+                iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
 
-
-                }
+                currentLinkState = LinkState.PREPARE_CREATION;
             }
-
-            case PREPARE_CREATION -> {
-
-            }
+            // context: user selected on the canvas
+            // side effect: nothing happens; links are only created on state machine nodes
         }
     }
 
@@ -195,6 +192,29 @@ public class AppController {
     }
 
 
+    /**
+     * General event handling method that differentiates between reacting to state machine node interactions and
+     * transition link interactions.
+     * @param mouseEvent event
+     * @param nx mouseX
+     * @param ny mouseY
+     */
+    public void handleCanvasDragged(MouseEvent mouseEvent, double nx, double ny) {
+        if (iModel.getNodeControl()) nodeHandleDragged(mouseEvent, nx, ny);
+
+        if (iModel.getTransitionLinkControl()) linkHandleDragged(mouseEvent, nx, ny);
+    }
+
+    /**
+     *
+     * @param mouseEvent
+     * @param nx
+     * @param ny
+     */
+    private void linkHandleDragged(MouseEvent mouseEvent, double nx, double ny) {
+
+    }
+
 
     /**
      * Manages the dragging state and prepare_create state. During dragging state, nodes being dragged can be
@@ -204,7 +224,7 @@ public class AppController {
      * @param nx mouseX
      * @param ny mouseY
      */
-    public void handleDragged(MouseEvent mouseEvent, double nx, double ny) {
+    private void nodeHandleDragged(MouseEvent mouseEvent, double nx, double ny) {
         // only run this code when nodeControl is set to true
         if (!iModel.getNodeControl()) {return;}
 
