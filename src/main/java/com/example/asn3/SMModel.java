@@ -17,6 +17,11 @@ public class SMModel {
      */
     private List<SMModelListener> subscribers;
 
+    /**
+     * list of transition links created in the canvas
+     */
+    private List<SMTransitionLink> links;
+
 
     /**
      * Constructor method
@@ -24,6 +29,7 @@ public class SMModel {
     public SMModel() {
         subscribers = new ArrayList<>();
         nodes = new ArrayList<>();
+        links = new ArrayList<>();
     }
 
 
@@ -89,5 +95,23 @@ public class SMModel {
         notifySubscribers();
     }
 
+    /**
+     * Create a new link and add it to the list of links created in the canvas
+     * @param x1 starting x coordinate
+     * @param y1 starting y coordinate
+     * @param x2 ending x coordinate
+     * @param y2 ending y coordinate
+     */
+    public void createLink(double x1, double y1, double x2, double y2) {
+        links.add(new SMTransitionLink(x1, y1, x2, y2));
+        notifySubscribers();
+    }
 
+    public List<SMTransitionLink> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<SMTransitionLink> links) {
+        this.links = links;
+    }
 }

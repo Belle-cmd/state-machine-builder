@@ -32,13 +32,14 @@ public class InteractionModel {
 
     /**
      * Boolean indicating if the user can create a node in a canvas location, move a selected node, or select a node.
-     * This is activated when the pointer tool is selected to enable the user to manipulate a state machine node.
+     * This is activated when the POINTER TOOL is selected to enable the user to manipulate a state machine node.
      * If set to false, the user can't create a node in a location, move a selected node, select a node
      */
     private Boolean nodeControl;
 
     /**
      * Boolean indicating if the user can create transition links (true) or not (false).
+     * This is activated when the LINK TOOL is selected to enable the user to manipulate a state machine node.
      */
     private Boolean transitionLinkControl;
 
@@ -47,11 +48,17 @@ public class InteractionModel {
      * Constructor method
      */
     public InteractionModel() {
-        selectedNode = null;
-        nodeControl = false;
+        selectedNode = null;  // saves the node selected by the user
+        nodeControl = false;  // dictates when the user can manipulate state machine nodes, based on arrow tool button
+        transitionLinkControl = false;  // dictates when the user can create links, based on link tool button
+
         toolsSubscribers = new ArrayList<>();
         canvasSubscribers = new ArrayList<>();
     }
+
+
+    // methods used for publish-subscribe model
+
 
     public void addToolSubscriber(IModelListener sub) {
         toolsSubscribers.add(sub);
@@ -70,8 +77,8 @@ public class InteractionModel {
     }
 
 
+    // getter and setter methods for data stored in interaction model
 
-    // methods called by the controller
 
     /**
      * Called by the controller to store which tool gets selected
@@ -94,7 +101,6 @@ public class InteractionModel {
      * @param n node selected by the user
      */
     public void setSelectedNode(SMStateNode n) {
-        System.out.println("SELECTED NODE IS STORED IN IMODEL:" + n);
         selectedNode = n;
         notifyCanvasSubscribers();
     }
@@ -116,7 +122,8 @@ public class InteractionModel {
 
     /**
      * The value of nodeControl is manipulated by the ToolPalette view based on the tool buttons.
-     * The value of nodeControl is checked at the controller to perform selection, position, node creation.
+     * The value of nodeControl is checked at the controller to perform selection, position, node creation
+     * (ARROW TOOL BUTTON).
      * @return if true, user can manipulate node creation, position, selection; false otherwise
      */
     public Boolean getNodeControl() {
@@ -124,7 +131,8 @@ public class InteractionModel {
     }
 
     /**
-     * Change the value of the nodeControl variable (indicates if node interaction and manipulation is allowed)
+     * Change the value of the nodeControl variable (indicates if node interaction and manipulation is allowed on
+     * ARROW TOOL BUTTON)
      * @param nodeControl new boolean value indicating if node movement, creation, selection is allowed
      */
     public void setNodeControl(Boolean nodeControl) {
@@ -132,16 +140,18 @@ public class InteractionModel {
     }
 
     /**
-     *
-     * @return
+     * Retrieve the transitionLinkControl value that indicates if the link tool button is activated by the user (for
+     * LINK TOOL BUTTON)
+     * @return when true, user is able to create line links to state machine nodes, false otherwise
      */
     public Boolean getTransitionLinkControl() {
         return transitionLinkControl;
     }
 
     /**
-     *
-     * @param transitionLinkControl
+     * Changes the value of transitionLinkControl variable indicating if the link tool button is activated by the user
+     * (FOR LINK TOOL BUTTON)
+     * @param transitionLinkControl if set to true, user can create line links to state machine nodes, false otherwise
      */
     public void setTransitionLinkControl(Boolean transitionLinkControl) {
         this.transitionLinkControl = transitionLinkControl;

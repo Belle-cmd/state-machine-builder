@@ -51,9 +51,16 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
      * @param controller calls the model based on user events
      */
     public void setController(AppController controller) {
-        canvas.setOnMousePressed(e -> controller.handlePressed(e, e.getX()/width, e.getY()/height));
-        canvas.setOnMouseDragged(e -> controller.handleDragged(e, e.getX()/width, e.getY()/height));
-        canvas.setOnMouseReleased(e -> controller.handleReleased(e, e.getX()/width, e.getY()/height));
+        canvas.setOnMousePressed(e -> {
+            controller.handleCanvasPressed(e, e.getX()/width, e.getY()/height);
+
+        });
+        canvas.setOnMouseDragged(e -> {
+            controller.handleDragged(e, e.getX()/width, e.getY()/height);
+        });
+        canvas.setOnMouseReleased(e -> {
+            controller.handleReleased(e, e.getX()/width, e.getY()/height);
+        });
     }
 
     /**
@@ -84,6 +91,14 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
 
             gc.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
             gc.strokeRect(boxLeft, boxTop, boxWidth, boxHeight);
+        });
+    }
+
+    public void drawLinks() {
+        gc.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+
+        model.getLinks().forEach(line -> {
+
         });
     }
 

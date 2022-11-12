@@ -37,7 +37,7 @@ public class ToolPalette extends StackPane implements IModelListener {
         buttons.forEach(b -> b.setOnAction(e -> {
             b.setButtonStatus(true);
             controller.handleButtonClick(b.getButtonStatus());
-            controller.handleTool(b.getScene(), b.getToolName());
+            controller.ToggleTool(b.getScene(), b.getToolName());
         }));
     }
 
