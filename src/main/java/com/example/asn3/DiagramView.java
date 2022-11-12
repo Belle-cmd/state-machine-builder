@@ -23,6 +23,10 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     /** Interaction model that handles state machine node selection */
     private InteractionModel iModel;
 
+    /** mouse position as coordinates
+     */
+    double mouseX, mouseY;
+
 
     /**
      * Constructor method
@@ -53,13 +57,16 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     public void setController(AppController controller) {
         canvas.setOnMousePressed(e -> {
             controller.handleCanvasPressed(e, e.getX()/width, e.getY()/height);
-
         });
         canvas.setOnMouseDragged(e -> {
             controller.handleCanvasDragged(e, e.getX()/width, e.getY()/height);
         });
         canvas.setOnMouseReleased(e -> {
-            controller.handleReleased(e, e.getX()/width, e.getY()/height);
+            controller.handleCanvasReleased(e, e.getX()/width, e.getY()/height);
+        });
+        canvas.setOnMouseMoved(e -> {
+            this.mouseX = e.getX();
+            this.mouseY = e.getY();
         });
     }
 
@@ -98,7 +105,10 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         gc.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
 
         model.getLinks().forEach(line -> {
-
+            line.doTransforms();
+            gc.setStroke(Color.BLACK);
+            gc.setLineWidth(2);
+            gc.strokeLine(line.tx1, line.y1, this.mouseX, this.mouseY);
         });
     }
 
@@ -110,5 +120,6 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     @Override
     public void modelChanged() {
         drawNodes();  // handles node creation
+        drawLinks();
     }
 }

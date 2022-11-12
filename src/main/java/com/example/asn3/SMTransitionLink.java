@@ -81,8 +81,21 @@ public class SMTransitionLink {
         return (distToLine < hitWidth && distToP1 <= length && distToP2 <= length);
     }
 
+    public void doTransforms() {
+        // prepare the coordinate values for rotation, scaling, translation
+        tx1 = x1;
+        ty1 = y1;
+        tx2 = x2;
+        ty2 = y2;
 
-    // helper methods for checking if the mouse is on a line
+        rotate();
+        scale();
+        translate();
+        calculateRatios();
+    }
+
+
+    // BELOW are helper methods for checking if the mouse is on a line
 
 
     /**
@@ -121,7 +134,7 @@ public class SMTransitionLink {
 
 
 
-    // methods for scaling, rotating, translating
+    // BELOW are helper methods for scaling, rotating, translating
 
 
     /**

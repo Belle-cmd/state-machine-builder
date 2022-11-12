@@ -60,6 +60,7 @@ public class AppController {
      */
     public AppController() {
         currentNodeState = NodeState.READY;
+        currentLinkState = LinkState.READY;
     }
 
 
@@ -170,23 +171,20 @@ public class AppController {
         prevX = nx;
         prevY = ny;
 
-        switch (currentNodeState) {
-            case READY -> {
-                // context: user selected on a state machine node
-                // side effect: set node selection
+        if (currentNodeState == NodeState.READY) {// context: user selected on a state machine node
+            // side effect: set node selection
 
-                // if a node is hit, set selection and move to new state
-                boolean nodeHit = model.checkHit(nx, ny);
-                if (nodeHit) {
-                    SMStateNode n = model.whichNode(nx,ny);
-                    iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
+            // if a node is hit, set selection and move to new state
+            boolean nodeHit = model.checkHit(nx, ny);
+            if (nodeHit) {
+                SMStateNode n = model.whichNode(nx, ny);
+                iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
 
-                    currentNodeState = NodeState.DRAGGING;  // move to a new state
-                } else {
-                    // context: user selected the canvas
-                    // side effects: none
-                    currentNodeState = NodeState.PREPARE_CREATE;  // move to a new state
-                }
+                currentNodeState = NodeState.DRAGGING;  // move to a new state
+            } else {
+                // context: user selected the canvas
+                // side effects: none
+                currentNodeState = NodeState.PREPARE_CREATE;  // move to a new state
             }
         }
     }
@@ -206,10 +204,10 @@ public class AppController {
     }
 
     /**
-     *
-     * @param mouseEvent
-     * @param nx
-     * @param ny
+     * This function handles mouse dragging when the tool button is set to the link tool button.
+     * @param mouseEvent event
+     * @param nx mouseX
+     * @param ny mouseY
      */
     private void linkHandleDragged(MouseEvent mouseEvent, double nx, double ny) {
 
@@ -246,6 +244,32 @@ public class AppController {
         }
     }
 
+
+
+    public void handleCanvasReleased(MouseEvent mouseEvent, double nx, double ny) {
+        if (iModel.getNodeControl()) nodeHandleReleased(mouseEvent, nx, ny);
+
+        if (iModel.getTransitionLinkControl()) linkHandleReleased(mouseEvent, nx, ny);
+    }
+
+    /**
+     *
+     * @param mouseEvent event
+     * @param nx mouseX
+     * @param ny mouseY
+     */
+    private void linkHandleReleased(MouseEvent mouseEvent, double nx, double ny) {
+        switch (currentLinkState) {
+            case PREPARE_CREATION -> {
+                // context: user selected on a node to create a link on
+                // side effect: a line with a starting point on a node is created
+
+                model.createLink(nx, ny, mouseEvent.getX(), mouseEvent.getY());
+                currentLinkState = LinkState.MOVING;
+            }
+        }
+    }
+
     /**
      * Manages the dragging state release event (when the user is dragging a node and has released the mouse, so
      * that the node will be set in place in the canvas) and prepare_create state's release event (when the user
@@ -255,7 +279,7 @@ public class AppController {
      * @param nx mouseX
      * @param ny mouseY
      */
-    public void handleReleased(MouseEvent mouseEvent, double nx, double ny) {
+    public void nodeHandleReleased(MouseEvent mouseEvent, double nx, double ny) {
         // only run this code when nodeControl is set to true
         if (!iModel.getNodeControl()) {return;}
 
