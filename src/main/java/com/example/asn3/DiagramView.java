@@ -12,7 +12,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     double width, height;
 
     /** Abstraction of pen **/
-    GraphicsContext gc;
+    GraphicsContext gcNode, gcLink;
 
     /** Abstraction of paper **/
     Canvas canvas;
@@ -23,8 +23,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     /** Interaction model that handles state machine node selection */
     private InteractionModel iModel;
 
-    /** mouse position as coordinates
-     */
+    /** mouse position as coordinates */
     double mouseX, mouseY;
 
 
@@ -35,8 +34,10 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         width = 800;
         height = 800;
         canvas = new Canvas(width, height);
-        gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
+        gcNode = canvas.getGraphicsContext2D();
+        gcLink = canvas.getGraphicsContext2D();
+        gcLink.setFill(Color.BLACK);
+        gcNode.setFill(Color.BLACK);
         this.setStyle("-fx-background-color: #b3f7ff;");  // sets background color of the "canvas"
         this.getChildren().add(canvas);
     }
@@ -75,12 +76,13 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
      */
     public void drawNodes() {
         // Clears a portion of the canvas with a transparent color value
-        gc.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+        gcNode.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+        gcNode.save();
 
-        gc.setStroke(Color.BLACK);  // for the boarder of the box
-        gc.setFill(Color.YELLOW);  // for the colour of the actual box
-        gc.setLineWidth(2.0);
-        gc.setLineDashes();  // boarder of the rectangle set to solid
+        gcNode.setStroke(Color.BLACK);  // for the boarder of the box
+        gcNode.setFill(Color.YELLOW);  // for the colour of the actual box
+        gcNode.setLineWidth(2.0);
+        gcNode.setLineDashes();  // boarder of the rectangle set to solid
 
         model.getNodes().forEach(n -> {
             double boxLeft, boxTop, boxWidth, boxHeight;  // set dimensions of the box
@@ -91,26 +93,28 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
 
             // changes the boarder of the selected node to indicate user selection
             if (n == iModel.getSelectedNode()) {
-                gc.setStroke(Color.RED);
+                gcNode.setStroke(Color.RED);
             } else {
-                gc.setStroke(Color.BLACK);
+                gcNode.setStroke(Color.BLACK);
             }
-
-            gc.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
-            gc.strokeRect(boxLeft, boxTop, boxWidth, boxHeight);
+            gcNode.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
+            gcNode.strokeRect(boxLeft, boxTop, boxWidth, boxHeight);
         });
     }
 
-    public void drawLinks() {
-        gc.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+    public void drawHoveringLink() {
+        gcLink.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+        gcNode.restore();
+        gcLink.restore();
 
+        gcLink.setStroke(Color.BLACK);
+        gcLink.setLineWidth(2);
         model.getLinks().forEach(line -> {
             line.doTransforms();
-            gc.setStroke(Color.BLACK);
-            gc.setLineWidth(2);
-            gc.strokeLine(line.tx1, line.y1, this.mouseX, this.mouseY);
+            gcLink.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
         });
     }
+
 
     @Override
     public void iModelChanged() {
@@ -120,6 +124,11 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     @Override
     public void modelChanged() {
         drawNodes();  // handles node creation
-        drawLinks();
+        if (iModel.getTransitionLinkControl()) drawHoveringLink();
+
+//        if (iModel.getTransitionLinkControl() && iModel.isLinkDragging()) drawHoveringLink(mouseX, mouseY);
+//        if (iModel.getTransitionLinkControl() && !iModel.isLinkDragging()) {
+//            // the mouse dragging is released, meaning a line has been created
+//        }
     }
 }

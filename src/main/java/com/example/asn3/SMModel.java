@@ -114,4 +114,22 @@ public class SMModel {
     public void setLinks(List<SMTransitionLink> links) {
         this.links = links;
     }
+
+//    /**
+//     *
+//     * @param startingX
+//     * @param startingY
+//     * @return
+//     */
+//    public SMTransitionLink whichLink(double startingX, double startingY) {
+//        SMTransitionLink found = null;
+//        for (SMTransitionLink l : links) {
+//            if (l.contains(startingX,startingY)) found = l;
+//        }
+//        return found;
+//    }
+//
+//    public void moveLink(double startingX, double startingY) {
+//        whichLink(startingX, startingY);
+//    }
 }

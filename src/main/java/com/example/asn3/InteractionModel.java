@@ -23,6 +23,15 @@ public class InteractionModel {
      */
     private SMStateNode selectedNode;
 
+    /**
+     * Stores the starting coordinates of a mouse press
+     */
+    private double startingX, startingY;
+
+
+
+    private boolean linkDragging;
+
     // the ff boolean values below are used to manage tool buttons to help organize how controller runs!
 
     /**
@@ -51,6 +60,9 @@ public class InteractionModel {
         selectedNode = null;  // saves the node selected by the user
         nodeControl = false;  // dictates when the user can manipulate state machine nodes, based on arrow tool button
         transitionLinkControl = false;  // dictates when the user can create links, based on link tool button
+
+        startingX=0;
+        startingY=0;
 
         toolsSubscribers = new ArrayList<>();
         canvasSubscribers = new ArrayList<>();
@@ -155,5 +167,29 @@ public class InteractionModel {
      */
     public void setTransitionLinkControl(Boolean transitionLinkControl) {
         this.transitionLinkControl = transitionLinkControl;
+    }
+
+    public double getStartingX() {
+        return startingX;
+    }
+
+    public void setStartingX(double startingX) {
+        this.startingX = startingX;
+    }
+
+    public double getStartingY() {
+        return startingY;
+    }
+
+    public void setStartingY(double startingY) {
+        this.startingY = startingY;
+    }
+
+    public boolean isLinkDragging() {
+        return linkDragging;
+    }
+
+    public void setLinkDragging(boolean linkDragging) {
+        this.linkDragging = linkDragging;
     }
 }

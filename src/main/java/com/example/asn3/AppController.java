@@ -21,7 +21,7 @@ public class AppController {
      * All the state of the program that relates to the transition links' side effects, events, and contexts
      */
     private enum LinkState {
-        READY, PREPARE_CREATION, MOVING, FINISH_CREATION
+        READY, DRAGGING
     }
 
     /**
@@ -48,11 +48,6 @@ public class AppController {
      * previous mouseX and mouseY positions for state machine nodes
      */
     double prevX, prevY;
-
-    /**
-     * previous mouseX nad mouseY position for line links
-     */
-    double prevLineX, prevLineY;
 
 
     /**
@@ -143,18 +138,21 @@ public class AppController {
      * @param ny mouse Y coordinate
      */
     private void linkHandlePress(MouseEvent mouseEvent, double nx, double ny) {
-        prevLineX = nx;
-        prevLineY = ny;
-
         if (currentLinkState == LinkState.READY) {
             boolean nodeHit = model.checkHit(nx, ny);
             if (nodeHit) {
+                System.out.println("controller: HANDLE_PRESS");
+
                 // context: user selected on a state machine node
                 // side effect: set node selection
                 SMStateNode n = model.whichNode(nx, ny);
                 iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
 
-                currentLinkState = LinkState.PREPARE_CREATION;
+                // save the starting coordinates of the link
+                iModel.setStartingX(n.left * 800);
+                iModel.setStartingY(n.top * 800);
+//                model.createLink(iModel.getStartingX(), iModel.getStartingY(), 0,0);
+                currentLinkState = LinkState.DRAGGING;
             }
             // context: user selected on the canvas
             // side effect: nothing happens; links are only created on state machine nodes
@@ -210,7 +208,10 @@ public class AppController {
      * @param ny mouseY
      */
     private void linkHandleDragged(MouseEvent mouseEvent, double nx, double ny) {
-
+        if (currentLinkState == LinkState.DRAGGING) {
+            System.out.println("controller: HANDLE_DRAGGED");
+            currentLinkState = LinkState.READY;
+        }
     }
 
 
@@ -223,9 +224,6 @@ public class AppController {
      * @param ny mouseY
      */
     private void nodeHandleDragged(MouseEvent mouseEvent, double nx, double ny) {
-        // only run this code when nodeControl is set to true
-        if (!iModel.getNodeControl()) {return;}
-
         double dX = nx - prevX;
         double dY = ny - prevY;
         prevX = nx;
@@ -249,7 +247,7 @@ public class AppController {
     public void handleCanvasReleased(MouseEvent mouseEvent, double nx, double ny) {
         if (iModel.getNodeControl()) nodeHandleReleased(mouseEvent, nx, ny);
 
-        if (iModel.getTransitionLinkControl()) linkHandleReleased(mouseEvent, nx, ny);
+        if (iModel.getTransitionLinkControl()) linkHandleReleased(mouseEvent, nx * 800, ny * 800);
     }
 
     /**
@@ -259,14 +257,19 @@ public class AppController {
      * @param ny mouseY
      */
     private void linkHandleReleased(MouseEvent mouseEvent, double nx, double ny) {
-        switch (currentLinkState) {
-            case PREPARE_CREATION -> {
-                // context: user selected on a node to create a link on
-                // side effect: a line with a starting point on a node is created
-
-                model.createLink(nx, ny, mouseEvent.getX(), mouseEvent.getY());
-                currentLinkState = LinkState.MOVING;
-            }
+//        switch (currentLinkState) {
+//            case DRAGGING -> {
+//                // context: user selected on a node to create a link on
+//                // side effect: a line with a starting point on a node is created
+//
+//                model.createLink(nx, ny, mouseEvent.getX(), mouseEvent.getY());
+//                currentLinkState = LinkState.READY;
+//            }
+//        }
+        if (currentLinkState == LinkState.READY) {
+            boolean nodeHit = model.checkHit(nx, ny);
+            System.out.println("controller: HANDLE_RELEASE " + nodeHit);
+            model.createLink(iModel.getStartingX(), iModel.getStartingY(), nx, ny);
         }
     }
 
@@ -280,9 +283,6 @@ public class AppController {
      * @param ny mouseY
      */
     public void nodeHandleReleased(MouseEvent mouseEvent, double nx, double ny) {
-        // only run this code when nodeControl is set to true
-        if (!iModel.getNodeControl()) {return;}
-
         switch (currentNodeState) {
             case PREPARE_CREATE -> {
                 // user releases the mouse while holding a node; place node into the canvas
