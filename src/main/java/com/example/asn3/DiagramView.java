@@ -23,8 +23,6 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     /** Interaction model that handles state machine node selection */
     private InteractionModel iModel;
 
-    /** mouse position as coordinates */
-    double mouseX, mouseY;
 
 
     /**
@@ -65,10 +63,6 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         canvas.setOnMouseReleased(e -> {
             controller.handleCanvasReleased(e, e.getX()/width, e.getY()/height);
         });
-        canvas.setOnMouseMoved(e -> {
-            this.mouseX = e.getX();
-            this.mouseY = e.getY();
-        });
     }
 
     /**
@@ -77,7 +71,6 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     public void drawNodes() {
         // Clears a portion of the canvas with a transparent color value
         gcNode.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
-        gcNode.save();
 
         gcNode.setStroke(Color.BLACK);  // for the boarder of the box
         gcNode.setFill(Color.YELLOW);  // for the colour of the actual box
@@ -88,7 +81,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
             double boxLeft, boxTop, boxWidth, boxHeight;  // set dimensions of the box
             boxLeft = n.left * width;
             boxTop = n.top * height;
-            boxWidth = n.width * width;
+            boxWidth = n.width * width * 1.5;
             boxHeight = n.height * height;
 
             // changes the boarder of the selected node to indicate user selection
@@ -102,16 +95,13 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         });
     }
 
-    public void drawHoveringLink() {
-        gcLink.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
-        gcNode.restore();
-        gcLink.restore();
-
-        gcLink.setStroke(Color.BLACK);
-        gcLink.setLineWidth(2);
+    public void drawLinks() {
+//        gcNode.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+        gcNode.setStroke(Color.BLACK);
+        gcNode.setLineWidth(2);
         model.getLinks().forEach(line -> {
             line.doTransforms();
-            gcLink.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
+            gcNode.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
         });
     }
 
@@ -124,7 +114,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     @Override
     public void modelChanged() {
         drawNodes();  // handles node creation
-        if (iModel.getTransitionLinkControl()) drawHoveringLink();
+        if (iModel.getTransitionLinkControl()) drawLinks();
 
 //        if (iModel.getTransitionLinkControl() && iModel.isLinkDragging()) drawHoveringLink(mouseX, mouseY);
 //        if (iModel.getTransitionLinkControl() && !iModel.isLinkDragging()) {
