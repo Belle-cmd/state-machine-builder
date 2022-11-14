@@ -100,7 +100,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         gcNode.setStroke(Color.BLACK);
         gcNode.setLineWidth(2);
         model.getLinks().forEach(line -> {
-            line.doTransforms(line.startNode, line.endNode);
+            line.doTransforms();
             gcNode.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
         });
     }
@@ -117,6 +117,5 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     public void modelChanged() {
         drawNodes();  // handles node creation
         drawLinks();
-
     }
 }

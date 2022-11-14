@@ -50,9 +50,9 @@ public class SMTransitionLink {
      */
     public SMTransitionLink(SMStateNode startingNode, SMStateNode endingNode) {
         double nx1 = (startingNode.left * 800)+60;
-        double ny1 = (startingNode.top * 800)+40;
+        double ny1 = (startingNode.top * 800);
         double nx2 = (endingNode.left * 800)+60;
-        double ny2 = (endingNode.top * 800)+40;
+        double ny2 = (endingNode.top * 800);
 
         this.startNode = startingNode;
         this.endNode = endingNode;
@@ -92,15 +92,13 @@ public class SMTransitionLink {
     /**
      * When called using the starting node and ending node stored by the transition link object, the link
      * can follow the nodes connect to it, when they are moved throughout the canvas.
-     * @param startingNode the node that a line will be drawn from, and follow
-     * @param endingNode the node that a line will be drawn to, and follow
      */
-    public void doTransforms(SMStateNode startingNode, SMStateNode endingNode) {
+    public void doTransforms() {
         // prepare the coordinate values for rotation, scaling, translation
-        double nx1 = (startingNode.left * 800)+60;
-        double ny1 = (startingNode.top * 800)+40;
-        double nx2 = (endingNode.left * 800)+60;
-        double ny2 = (endingNode.top * 800)+40;
+        double nx1 = (this.startNode.left * 800)+60;
+        double ny1 = (this.startNode.top * 800);
+        double nx2 = (this.endNode.left * 800)+60;
+        double ny2 = (this.endNode.top * 800);
 
         translateX = (nx1 + nx2) / 2;
         translateY = (ny1 + ny2) / 2;
@@ -141,8 +139,6 @@ public class SMTransitionLink {
 
     /**
      * Calculates the ratio signifying the distance from a point to an object based on the length of the line
-     * @param mx
-     * @param my
      * @return distance from a point to an object
      */
     private double distanceFromLine(double mx, double my) {
@@ -163,7 +159,6 @@ public class SMTransitionLink {
 
 
     // BELOW are helper methods for scaling, rotating, translating
-
 
     /**
      * Rotates a line, 1 coordinate unit at a time.

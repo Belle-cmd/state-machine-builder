@@ -1,15 +1,20 @@
 package com.example.asn3;
 
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 
 /**
  * A view that contains and lays out the toolbar and the drawing surface
  */
-public class MainUI extends BorderPane {
+public class MainUI extends StackPane {
     public MainUI() {
+        BorderPane root = new BorderPane();
+
         // create view components
         ToolPalette toolPaletteView = new ToolPalette();
         DiagramView diagramView = new DiagramView();
+        NodePropertiesView nodePropertiesView = new NodePropertiesView();
+        LinkPropertiesView linkPropertiesView = new LinkPropertiesView();
 
         // create model components
         SMModel model = new SMModel();
@@ -47,7 +52,10 @@ public class MainUI extends BorderPane {
 
 
         // set up View layout
-        this.setLeft(toolPaletteView);
-        this.setCenter(diagramView);
+        root.setLeft(toolPaletteView);
+        root.setCenter(diagramView);
+        root.setRight(linkPropertiesView);
+
+        this.getChildren().add(root);
     }
 }
