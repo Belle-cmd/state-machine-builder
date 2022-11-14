@@ -24,9 +24,9 @@ public class InteractionModel {
     private SMStateNode selectedNode;
 
     /**
-     * Stores the starting coordinates of a mouse press
+     * Temporary storage for starting node and ending node to create a link
      */
-    private double startingX, startingY;
+    private SMStateNode startingNode, endingNode;
 
 
 
@@ -61,8 +61,8 @@ public class InteractionModel {
         nodeControl = false;  // dictates when the user can manipulate state machine nodes, based on arrow tool button
         transitionLinkControl = false;  // dictates when the user can create links, based on link tool button
 
-        startingX=0;
-        startingY=0;
+        startingNode = null;
+        endingNode = null;
 
         toolsSubscribers = new ArrayList<>();
         canvasSubscribers = new ArrayList<>();
@@ -169,27 +169,27 @@ public class InteractionModel {
         this.transitionLinkControl = transitionLinkControl;
     }
 
-    public double getStartingX() {
-        return startingX;
-    }
-
-    public void setStartingX(double startingX) {
-        this.startingX = startingX;
-    }
-
-    public double getStartingY() {
-        return startingY;
-    }
-
-    public void setStartingY(double startingY) {
-        this.startingY = startingY;
-    }
-
     public boolean isLinkDragging() {
         return linkDragging;
     }
 
     public void setLinkDragging(boolean linkDragging) {
         this.linkDragging = linkDragging;
+    }
+
+    public SMStateNode getStartingNode() {
+        return startingNode;
+    }
+
+    public void setStartingNode(SMStateNode startingNode) {
+        this.startingNode = startingNode;
+    }
+
+    public SMStateNode getEndingNode() {
+        return endingNode;
+    }
+
+    public void setEndingNode(SMStateNode endingNode) {
+        this.endingNode = endingNode;
     }
 }

@@ -40,15 +40,23 @@ public class SMTransitionLink {
 
     double length;
 
+    SMStateNode startNode, endNode;
+
 
     /**
      * Constructor method that creates a line
-     * @param nx1 starting x coordinate
-     * @param ny1 starting y coordinate
-     * @param nx2 ending x coordinate
-     * @param ny2 ending y coordinate
+     * @param startingNode the node that a line will be drawn from
+     * @param endingNode the node that a line will be drawn to
      */
-    public SMTransitionLink(double nx1, double ny1, double nx2, double ny2) {
+    public SMTransitionLink(SMStateNode startingNode, SMStateNode endingNode) {
+        double nx1 = (startingNode.left * 800)+60;
+        double ny1 = (startingNode.top * 800)+40;
+        double nx2 = (endingNode.left * 800)+60;
+        double ny2 = (endingNode.top * 800)+40;
+
+        this.startNode = startingNode;
+        this.endNode = endingNode;
+
         // calculate the midpoint
         translateX = (nx1 + nx2) / 2;
         translateY = (ny1 + ny2) / 2;
@@ -81,8 +89,28 @@ public class SMTransitionLink {
         return (distToLine < hitWidth && distToP1 <= length && distToP2 <= length);
     }
 
-    public void doTransforms() {
+    /**
+     * When called using the starting node and ending node stored by the transition link object, the link
+     * can follow the nodes connect to it, when they are moved throughout the canvas.
+     * @param startingNode the node that a line will be drawn from, and follow
+     * @param endingNode the node that a line will be drawn to, and follow
+     */
+    public void doTransforms(SMStateNode startingNode, SMStateNode endingNode) {
         // prepare the coordinate values for rotation, scaling, translation
+        double nx1 = (startingNode.left * 800)+60;
+        double ny1 = (startingNode.top * 800)+40;
+        double nx2 = (endingNode.left * 800)+60;
+        double ny2 = (endingNode.top * 800)+40;
+
+        translateX = (nx1 + nx2) / 2;
+        translateY = (ny1 + ny2) / 2;
+
+        // line coordinates
+        x1 = nx1 - translateX;
+        y1 = ny1 - translateY;
+        x2 = nx2 - translateX;
+        y2 = ny2 - translateY;
+
         tx1 = x1;
         ty1 = y1;
         tx2 = x2;

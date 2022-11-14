@@ -100,7 +100,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         gcNode.setStroke(Color.BLACK);
         gcNode.setLineWidth(2);
         model.getLinks().forEach(line -> {
-            line.doTransforms();
+            line.doTransforms(line.startNode, line.endNode);
             gcNode.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
         });
     }
@@ -109,16 +109,14 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     @Override
     public void iModelChanged() {
         drawNodes();  // handles change in boarder
+        drawLinks();
+
     }
 
     @Override
     public void modelChanged() {
         drawNodes();  // handles node creation
-        if (iModel.getTransitionLinkControl()) drawLinks();
+        drawLinks();
 
-//        if (iModel.getTransitionLinkControl() && iModel.isLinkDragging()) drawHoveringLink(mouseX, mouseY);
-//        if (iModel.getTransitionLinkControl() && !iModel.isLinkDragging()) {
-//            // the mouse dragging is released, meaning a line has been created
-//        }
     }
 }

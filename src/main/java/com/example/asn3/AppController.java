@@ -148,10 +148,8 @@ public class AppController {
                 SMStateNode n = model.whichNode(nx, ny);
                 iModel.setSelectedNode(n);  // notifies the iModel about the new node selected
 
-                // save the starting coordinates of the link
-                iModel.setStartingX(n.left * 800);
-                iModel.setStartingY(n.top * 800);
-//                model.createLink(iModel.getStartingX(), iModel.getStartingY(), 0,0);
+                // save the starting node of the link
+                iModel.setStartingNode(n);
                 currentLinkState = LinkState.DRAGGING;
             }
             // context: user selected on the canvas
@@ -247,7 +245,7 @@ public class AppController {
     public void handleCanvasReleased(MouseEvent mouseEvent, double nx, double ny) {
         if (iModel.getNodeControl()) nodeHandleReleased(mouseEvent, nx, ny);
 
-        if (iModel.getTransitionLinkControl()) linkHandleReleased(mouseEvent, nx * 800, ny * 800);
+        if (iModel.getTransitionLinkControl()) linkHandleReleased(mouseEvent, nx, ny);
     }
 
     /**
@@ -257,19 +255,14 @@ public class AppController {
      * @param ny mouseY
      */
     private void linkHandleReleased(MouseEvent mouseEvent, double nx, double ny) {
-//        switch (currentLinkState) {
-//            case DRAGGING -> {
-//                // context: user selected on a node to create a link on
-//                // side effect: a line with a starting point on a node is created
-//
-//                model.createLink(nx, ny, mouseEvent.getX(), mouseEvent.getY());
-//                currentLinkState = LinkState.READY;
-//            }
-//        }
         if (currentLinkState == LinkState.READY) {
-            boolean nodeHit = model.checkHit(nx, ny);
-            System.out.println("controller: HANDLE_RELEASE " + nodeHit);
-            model.createLink(iModel.getStartingX(), iModel.getStartingY(), nx, ny);
+            boolean nodeHit = model.checkHit(nx,ny);
+            System.out.println("NODE HIT: "+nodeHit);
+            if (nodeHit) {
+                SMStateNode n = model.whichNode(nx, ny);
+                iModel.setEndingNode(n);
+                model.createLink(iModel.getStartingNode(), iModel.getEndingNode());
+            }
         }
     }
 

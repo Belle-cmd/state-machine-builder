@@ -97,13 +97,11 @@ public class SMModel {
 
     /**
      * Create a new link and add it to the list of links created in the canvas
-     * @param x1 starting x coordinate
-     * @param y1 starting y coordinate
-     * @param x2 ending x coordinate
-     * @param y2 ending y coordinate
+     * @param startingNode the node that a line will be drawn from
+     * @param endingNode the node that a line will be drawn to
      */
-    public void createLink(double x1, double y1, double x2, double y2) {
-        links.add(new SMTransitionLink(x1, y1, x2, y2));
+    public void createLink(SMStateNode startingNode, SMStateNode endingNode) {
+        links.add(new SMTransitionLink(startingNode, endingNode));
         notifySubscribers();
     }
 
@@ -115,21 +113,4 @@ public class SMModel {
         this.links = links;
     }
 
-//    /**
-//     *
-//     * @param startingX
-//     * @param startingY
-//     * @return
-//     */
-//    public SMTransitionLink whichLink(double startingX, double startingY) {
-//        SMTransitionLink found = null;
-//        for (SMTransitionLink l : links) {
-//            if (l.contains(startingX,startingY)) found = l;
-//        }
-//        return found;
-//    }
-//
-//    public void moveLink(double startingX, double startingY) {
-//        whichLink(startingX, startingY);
-//    }
 }
