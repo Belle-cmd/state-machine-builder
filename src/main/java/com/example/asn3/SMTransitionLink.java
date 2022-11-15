@@ -50,9 +50,9 @@ public class SMTransitionLink {
      */
     public SMTransitionLink(SMStateNode startingNode, SMStateNode endingNode) {
         double nx1 = (startingNode.left * 800)+60;
-        double ny1 = (startingNode.top * 800);
+        double ny1 = (startingNode.top * 800)+40;
         double nx2 = (endingNode.left * 800)+60;
-        double ny2 = (endingNode.top * 800);
+        double ny2 = (endingNode.top * 800)+40;
 
         this.startNode = startingNode;
         this.endNode = endingNode;
@@ -96,9 +96,9 @@ public class SMTransitionLink {
     public void doTransforms() {
         // prepare the coordinate values for rotation, scaling, translation
         double nx1 = (this.startNode.left * 800)+60;
-        double ny1 = (this.startNode.top * 800);
+        double ny1 = (this.startNode.top * 800)+40;
         double nx2 = (this.endNode.left * 800)+60;
-        double ny2 = (this.endNode.top * 800);
+        double ny2 = (this.endNode.top * 800)+40;
 
         translateX = (nx1 + nx2) / 2;
         translateY = (ny1 + ny2) / 2;

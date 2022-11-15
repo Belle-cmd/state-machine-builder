@@ -8,6 +8,7 @@ public class SMStateNode {
      *  dimensions of the node
      */
     double left, top, width, height;
+    private String stateName;
 
     /**
      * Constructor method that creates the dimensions of the box
@@ -21,6 +22,7 @@ public class SMStateNode {
         this.top = newTop;
         this.width = newWidth;
         this.height = newHeight;
+        this.stateName = "Default";
     }
 
 
@@ -42,5 +44,21 @@ public class SMStateNode {
      */
     public boolean checkNodeHitBox(double x, double y) {
         return x >= left && x <= left+width && y >= top && y <= top+height;
+    }
+
+    /**
+     * Getter method for the state machine node's state name
+     * @return string state name
+     */
+    public String getStateName() {
+        return stateName;
+    }
+
+    /**
+     * Setter method for the state machine node's state name
+     * @param stateName new string state name
+     */
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

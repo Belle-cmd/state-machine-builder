@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  * A view that contains a canvas to show the drawing and allow user interaction
@@ -22,6 +23,8 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
 
     /** Interaction model that handles state machine node selection */
     private InteractionModel iModel;
+
+    private Text text;
 
 
 
@@ -59,6 +62,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         });
         canvas.setOnMouseDragged(e -> {
             controller.handleCanvasDragged(e, e.getX()/width, e.getY()/height);
+
         });
         canvas.setOnMouseReleased(e -> {
             controller.handleCanvasReleased(e, e.getX()/width, e.getY()/height);
@@ -69,8 +73,6 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
      * Draw nodes on the canvas
      */
     public void drawNodes() {
-        // Clears a portion of the canvas with a transparent color value
-        gcNode.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
 
         gcNode.setStroke(Color.BLACK);  // for the boarder of the box
         gcNode.setFill(Color.YELLOW);  // for the colour of the actual box
@@ -92,30 +94,43 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
             }
             gcNode.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
             gcNode.strokeRect(boxLeft, boxTop, boxWidth, boxHeight);
+
+//            text = new Text();
+//            text.setX(boxLeft+10);
+//            text.setY(boxTop+20);
+//            text.setText(n.getStateName());
+//            this.getChildren().add(text);
         });
     }
 
     public void drawLinks() {
-//        gcNode.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
-        gcNode.setStroke(Color.BLACK);
-        gcNode.setLineWidth(2);
+        // Clears a portion of the canvas with a transparent color value
+        gcNode.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+
+//        gcLink.save();
+        gcLink.setFill(Color.BLACK);  // for the colour of the actual box
+        gcLink.setLineWidth(2.0);
+
+        gcLink.setStroke(Color.BLACK);
+        gcLink.setLineWidth(2);
         model.getLinks().forEach(line -> {
+            System.out.println(line);
             line.doTransforms();
-            gcNode.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
+            gcLink.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
         });
     }
 
 
     @Override
     public void iModelChanged() {
-        drawNodes();  // handles change in boarder
         drawLinks();
+        drawNodes();  // handles change in boarder
 
     }
 
     @Override
     public void modelChanged() {
-        drawNodes();  // handles node creation
         drawLinks();
+        drawNodes();  // handles node creation
     }
 }
