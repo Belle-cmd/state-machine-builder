@@ -53,8 +53,8 @@ public class MainUI extends StackPane {
 
         // set up View layout
         root.setLeft(toolPaletteView);
-        root.setCenter(diagramView);
         root.setRight(linkPropertiesView);
+        root.setCenter(diagramView);
 
         this.getChildren().add(root);
     }

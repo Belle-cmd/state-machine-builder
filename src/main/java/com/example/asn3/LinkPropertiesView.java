@@ -34,6 +34,7 @@ public class LinkPropertiesView extends StackPane {
 
         vBox.getChildren().addAll(
                 titleLbl, eventLbl, eventTxtFld, contextLbl, contextTxtArea, sfxLbl, sfxTxtArea, updateBtn);
+        vBox.setStyle("-fx-background-color: white;");
         this.setPrefWidth(230);
         this.getChildren().add(vBox);
     }

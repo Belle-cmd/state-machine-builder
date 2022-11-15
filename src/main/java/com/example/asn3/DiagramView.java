@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
@@ -24,8 +25,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     /** Interaction model that handles state machine node selection */
     private InteractionModel iModel;
 
-    private Text text;
-
+    private Font font;
 
 
     /**
@@ -40,6 +40,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         gcLink.setFill(Color.BLACK);
         gcNode.setFill(Color.BLACK);
         this.setStyle("-fx-background-color: #b3f7ff;");  // sets background color of the "canvas"
+        font = new Font(18);
         this.getChildren().add(canvas);
     }
 
@@ -73,11 +74,11 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
      * Draw nodes on the canvas
      */
     public void drawNodes() {
-
         gcNode.setStroke(Color.BLACK);  // for the boarder of the box
         gcNode.setFill(Color.YELLOW);  // for the colour of the actual box
         gcNode.setLineWidth(2.0);
         gcNode.setLineDashes();  // boarder of the rectangle set to solid
+        gcNode.setFont(font);
 
         model.getNodes().forEach(n -> {
             double boxLeft, boxTop, boxWidth, boxHeight;  // set dimensions of the box
@@ -92,40 +93,35 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
             } else {
                 gcNode.setStroke(Color.BLACK);
             }
-            gcNode.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
-            gcNode.strokeRect(boxLeft, boxTop, boxWidth, boxHeight);
 
-//            text = new Text();
-//            text.setX(boxLeft+10);
-//            text.setY(boxTop+20);
-//            text.setText(n.getStateName());
-//            this.getChildren().add(text);
+            gcNode.fillRect(boxLeft, boxTop, boxWidth, boxHeight);
+            gcNode.setFill(Color.BLACK);  // for the color of the text
+            gcNode.fillText(n.getStateName(), boxLeft+33, boxTop+45);
+            gcNode.setFill(Color.YELLOW);  // for the color of the node
+            gcNode.strokeRect(boxLeft, boxTop, boxWidth, boxHeight);
         });
     }
+
 
     public void drawLinks() {
         // Clears a portion of the canvas with a transparent color value
         gcNode.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
 
-//        gcLink.save();
         gcLink.setFill(Color.BLACK);  // for the colour of the actual box
         gcLink.setLineWidth(2.0);
 
         gcLink.setStroke(Color.BLACK);
         gcLink.setLineWidth(2);
         model.getLinks().forEach(line -> {
-            System.out.println(line);
             line.doTransforms();
             gcLink.strokeLine(line.tx1,line.ty1,line.tx2,line.ty2);
         });
     }
 
-
     @Override
     public void iModelChanged() {
         drawLinks();
         drawNodes();  // handles change in boarder
-
     }
 
     @Override
