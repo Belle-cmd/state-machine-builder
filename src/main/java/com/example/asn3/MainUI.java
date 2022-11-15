@@ -42,10 +42,8 @@ public class MainUI extends StackPane {
         diagramView.setModel(model);
         diagramView.setController(controller);
 
-//        smStateNode.setModel(model);
-//        smStateNode.setInteractionModel(iModel);
-//        smStateNode.setController(controller);
-
+        nodePropertiesView.setInteractionModel(iModel);
+        nodePropertiesView.setController(controller);  // has to be after the iModel bc controller needs info from iModel
 
         controller.setModel(model);
         controller.setInteractionModel(iModel);
@@ -53,7 +51,7 @@ public class MainUI extends StackPane {
 
         // set up View layout
         root.setLeft(toolPaletteView);
-        root.setRight(linkPropertiesView);
+        root.setRight(nodePropertiesView);
         root.setCenter(diagramView);
 
         this.getChildren().add(root);

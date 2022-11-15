@@ -25,6 +25,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     /** Interaction model that handles state machine node selection */
     private InteractionModel iModel;
 
+    /** Stores the font style used to display node state name and transition info */
     private Font font;
 
 
@@ -40,7 +41,7 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
         gcLink.setFill(Color.BLACK);
         gcNode.setFill(Color.BLACK);
         this.setStyle("-fx-background-color: #b3f7ff;");  // sets background color of the "canvas"
-        font = new Font(18);
+        font = new Font(15);
         this.getChildren().add(canvas);
     }
 
@@ -60,6 +61,8 @@ public class DiagramView extends Pane implements IModelListener, SMModelListener
     public void setController(AppController controller) {
         canvas.setOnMousePressed(e -> {
             controller.handleCanvasPressed(e, e.getX()/width, e.getY()/height);
+            iModel.setCanvasMouseX(e.getX()/width);  // used by NodePropertiesView for node state name editing
+            iModel.setCanvasMouseY(e.getY()/height);
         });
         canvas.setOnMouseDragged(e -> {
             controller.handleCanvasDragged(e, e.getX()/width, e.getY()/height);

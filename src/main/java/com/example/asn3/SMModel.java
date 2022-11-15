@@ -109,8 +109,17 @@ public class SMModel {
         return links;
     }
 
-    public void setLinks(List<SMTransitionLink> links) {
-        this.links = links;
+    /**
+     * Change a node's state machine name by first retrieving the selected node, then changing its state name.
+     * @param text new state machine name
+     * @param nx mouseX position of a possibly selected node
+     * @param ny mouseY position of a possibly selected node
+     */
+    public void changeStateName(String text, double nx, double ny) {
+        SMStateNode n = whichNode(nx, ny);
+        if (n != null ) {
+            n.setStateName(text);
+            notifySubscribers();
+        }
     }
-
 }

@@ -2,6 +2,7 @@ package com.example.asn3;
 
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.util.Objects;
@@ -288,6 +289,17 @@ public class AppController {
                 iModel.unselectNode();
                 currentNodeState = NodeState.READY;
             }
+        }
+    }
+
+    /**
+     * Calls the model to change the selected node's state name
+     * @param textField the new name of a state machine node
+     */
+    public void handleStateNameKeyPressEnter(TextField textField, double nx, double ny) {
+        boolean nodeHit = model.checkHit(nx, ny);
+        if (nodeHit) {
+            model.changeStateName(textField.getText(), nx, ny);
         }
     }
 }

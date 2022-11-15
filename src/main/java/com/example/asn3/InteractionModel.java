@@ -1,5 +1,7 @@
 package com.example.asn3;
 
+import javafx.scene.canvas.Canvas;
+
 import java.util.ArrayList;
 
 /**
@@ -28,9 +30,11 @@ public class InteractionModel {
      */
     private SMStateNode startingNode, endingNode;
 
+    /**
+     * Stores the canvas object created in the DiagramView
+     */
+    private double canvasMouseX, canvasMouseY;
 
-
-    private boolean linkDragging;
 
     // the ff boolean values below are used to manage tool buttons to help organize how controller runs!
 
@@ -169,13 +173,6 @@ public class InteractionModel {
         this.transitionLinkControl = transitionLinkControl;
     }
 
-    public boolean isLinkDragging() {
-        return linkDragging;
-    }
-
-    public void setLinkDragging(boolean linkDragging) {
-        this.linkDragging = linkDragging;
-    }
 
     public SMStateNode getStartingNode() {
         return startingNode;
@@ -191,5 +188,37 @@ public class InteractionModel {
 
     public void setEndingNode(SMStateNode endingNode) {
         this.endingNode = endingNode;
+    }
+
+    /**
+     * Retrieves the mouse position on the canvas during a mouse press
+     * @return mouse position on canvas
+     */
+    public double getCanvasMouseX() {
+        return canvasMouseX;
+    }
+
+    /**
+     * Stores the mouse position on the canvas during a mouse press
+     * @param canvasMouseX mouse position on canvas
+     */
+    public void setCanvasMouseX(double canvasMouseX) {
+        this.canvasMouseX = canvasMouseX;
+    }
+
+    /**
+     * Retrieves the mouse position on the canvas during a mouse press
+     * @return mouse position on canvas
+     */
+    public double getCanvasMouseY() {
+        return canvasMouseY;
+    }
+
+    /**
+     * Stores the mouse position on the canvas during a mouse press
+     * @param canvasMouseY mouse position on canvas
+     */
+    public void setCanvasMouseY(double canvasMouseY) {
+        this.canvasMouseY = canvasMouseY;
     }
 }
